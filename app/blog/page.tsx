@@ -1,0 +1,6 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowUpRight, Rss } from 'lucide-react';
+import { posts } from '@/lib/site';
+export const metadata: Metadata = { title: 'Journal', description: 'Development notes from Habeebu Rahman about Python, Django, React, databases and deployment.', alternates: { canonical: '/blog' } };
+export default function BlogPage() { return <section className="page-shell listing-page"><p className="section-index">FIELD NOTES / JOURNAL</p><h1>Learning out loud<span className="text-gradient">.</span></h1><p className="listing-intro">Notes from building, debugging and figuring things out. Practical lessons over perfect tutorials.</p><a href="/rss.xml" className="rss-button"><Rss size={16}/> Subscribe to RSS <ArrowUpRight size={14}/></a><div className="post-list blog-list">{posts.map(post => <Link href={`/blog/${post.slug}`} className="post-row" key={post.slug}><span className="post-date">{post.date.slice(0,7)}</span><div><h2>{post.title}</h2><p>{post.excerpt}</p><div className="tag-list">{post.tags.map(t => <span key={t}>{t}</span>)}</div></div><ArrowUpRight size={18}/></Link>)}</div><p className="draft-note">These are starter notes. I’ll keep adding practical write-ups as I document more project work.</p></section>; }
