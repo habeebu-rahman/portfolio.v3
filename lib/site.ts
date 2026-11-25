@@ -5,13 +5,25 @@ export const site = {
   email: 'habeeburahman271@gmail.com',
   location: 'Calicut, Kerala, India',
   description:
-    'Portfolio of Habeebu Rahman K C, a Python Full-Stack Developer working with Python, Django, Django REST Framework, React and PostgreSQL.',
+    'Habeebu Rahman K C is a Python Full-Stack Developer in Calicut, Kerala building web apps with Django, React and PostgreSQL. See projects, experience and notes.',
+  keywords: [
+    'Habeebu Rahman',
+    'Habeebu Rahman K C',
+    'Python Full-Stack Developer',
+    'Full-Stack Developer Calicut',
+    'Full-Stack Developer Kerala',
+    'Django developer',
+    'Django REST Framework',
+    'React developer',
+    'PostgreSQL',
+    'developer portfolio',
+  ],
   // Replace these with your real profile URLs and WhatsApp number before publishing.
   // Anything that still contains "YOUR_" is hidden automatically, so no dead links go live.
-  github: 'https://github.com/YOUR_GITHUB_USERNAME',
-  linkedin: 'https://www.linkedin.com/in/YOUR_LINKEDIN_USERNAME/',
+  github: 'https://github.com/habeebu-rahman',
+  instagram: 'https://www.instagram.com/its_habeeb_hehhee/',
   whatsapp:
-    'https://wa.me/91YOUR_PHONE_NUMBER?text=Hello%20Habeebu%2C%20I%20visited%20your%20portfolio.',
+    'https://wa.me/918606166091?text=Hello%20Habeebu%2C%20I%20visited%20your%20portfolio.',
 };
 
 /** True once a placeholder such as YOUR_GITHUB_USERNAME has been replaced with a real value. */

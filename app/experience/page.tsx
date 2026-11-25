@@ -3,17 +3,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, GraduationCap, MapPin, Code2 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Experience',
+export const metadata: Metadata = pageMetadata({
+  title: 'Experience & Education',
   description:
-    'Professional experience and education of Habeebu Rahman K C, Python Full-Stack Developer.',
-  alternates: { canonical: '/experience' },
-};
+    'Habeebu Rahman K C: Software Developer Trainee at Qiyam Ventures, Python Full-Stack Intern at Techolas Technologies, BCA from Calicut University.',
+  path: '/experience',
+});
 
 export default function ExperiencePage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Experience', path: '/experience' },
+        ])}
+      />
       <section className="inner-hero page-shell compact-inner-hero">
         <p className="eyebrow">THE WORK SO FAR</p>
         <h1>

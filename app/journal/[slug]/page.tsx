@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, Clock3 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { posts, site } from '@/lib/site';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, defaultOgImage, pageMetadata, personId } from '@/lib/seo';
 import ReactMarkdown from 'react-markdown';
 
 type Props = {
@@ -20,17 +22,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: 'Article not found' };
 
-  return {
+  return pageMetadata({
     title: post.title,
     description: post.excerpt,
-    alternates: { canonical: `/journal/${post.slug}` },
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      url: `${site.url}/journal/${post.slug}`,
-      type: 'article',
+    path: `/journal/${post.slug}`,
+    keywords: post.tags,
+    article: {
+      publishedTime: `${post.date}T09:00:00+05:30`,
+      tags: post.tags,
+      section: post.category,
     },
-  };
+  });
 }
 
 export default async function JournalArticle({ params }: Props) {
@@ -44,8 +46,36 @@ export default async function JournalArticle({ params }: Props) {
     Math.ceil((post.content || '').split(/\s+/).filter(Boolean).length / 200),
   );
 
+  const articleUrl = `${site.url}/journal/${post.slug}`;
+
   return (
     <div className="min-h-screen px-5 pb-20 pt-12 sm:px-8">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.excerpt,
+          url: articleUrl,
+          mainEntityOfPage: articleUrl,
+          image: `${site.url}${defaultOgImage.url}`,
+          datePublished: `${post.date}T09:00:00+05:30`,
+          dateModified: `${post.date}T09:00:00+05:30`,
+          articleSection: post.category,
+          keywords: post.tags.join(', '),
+          wordCount: (post.content || '').split(/\s+/).filter(Boolean).length,
+          inLanguage: 'en-IN',
+          author: { '@id': personId },
+          publisher: { '@id': personId },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Journal', path: '/journal' },
+          { name: post.title, path: `/journal/${post.slug}` },
+        ])}
+      />
       <div className="relative mx-auto w-full max-w-5xl">
         {/* Back navigation */}
         <Link
@@ -62,7 +92,7 @@ export default async function JournalArticle({ params }: Props) {
             {/* <span className="status-dot" /> */}
             <span>Field notes</span>
             <span>/</span>
-            <time>{post.date}</time>
+            <time dateTime={post.date}>{post.date}</time>
           </div>
 
           <h1 className="text-4xl font-semibold leading-tight tracking-tight text-[var(--color-ink)] sm:text-5xl lg:text-6xl">

@@ -7,20 +7,22 @@ import {
   Code2,
   GraduationCap,
   Github,
-  Linkedin,
+  Instagram,
   Mail,
   Lightbulb,
   Rocket,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, pageMetadata, personId } from '@/lib/seo';
 import { isConfigured, projects, site } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'About Habeebu Rahman K C',
+export const metadata: Metadata = pageMetadata({
+  title: 'About Me — Python Full-Stack Developer',
   description:
-    'A little about Habeebu Rahman K C, Python Full-Stack Developer from Calicut, Kerala.',
-  alternates: { canonical: '/about' },
-};
+    'Meet Habeebu Rahman K C, a Python Full-Stack Developer from Calicut, Kerala and BCA graduate of Calicut University who builds with Django, React and PostgreSQL.',
+  path: '/about',
+});
 
 const technologies = [
   'Python',
@@ -39,6 +41,22 @@ const technologies = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen overflow-hidden">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          url: `${site.url}/about`,
+          name: `About ${site.name}`,
+          inLanguage: 'en-IN',
+          mainEntity: { '@id': personId },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'About', path: '/about' },
+        ])}
+      />
       {/* INTRODUCTION */}
       <section className="relative mx-auto max-w-6xl px-5 pb-16 pt-14 sm:px-8">
         <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_0.7fr]">
@@ -406,9 +424,9 @@ export default function AboutPage() {
                 </a>
               )}
 
-              {isConfigured(site.linkedin) && (
-                <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <Linkedin
+              {isConfigured(site.instagram) && (
+                <a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+                  <Instagram
                     size={18}
                     className="text-[var(--color-muted)] hover:text-[var(--color-ink)]"
                   />

@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { Volume2, VolumeX, Github, Linkedin, ArrowUpRight, Menu, X } from 'lucide-react';
-import { playUiSound } from '@/lib/sounds';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { Volume2, VolumeX, Github, Instagram, ArrowUpRight, Menu, X } from 'lucide-react';
+import { getSoundEnabled, playUiSound, setSoundEnabled, subscribeSound } from '@/lib/sounds';
 import { isConfigured, site } from '@/lib/site';
 
 export function SoundToggle() {
-  const [enabled, setEnabled] = useState(false);
+  // One shared value for every toggle on the page (header + footer stay in sync).
+  const enabled = useSyncExternalStore(subscribeSound, getSoundEnabled, () => false);
   return (
     <button
       className="icon-button sound-toggle"
@@ -15,8 +16,7 @@ export function SoundToggle() {
       aria-pressed={enabled}
       onClick={() => {
         const next = !enabled;
-        setEnabled(next);
-        document.documentElement.dataset.sound = next ? 'on' : 'off';
+        setSoundEnabled(next);
         if (next) playUiSound('success');
       }}
       title={enabled ? 'Sound on' : 'Sound off'}
@@ -82,9 +82,9 @@ export function Footer() {
               <Github size={17} />
             </a>
           )}
-          {isConfigured(site.linkedin) && (
-            <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-              <Linkedin size={17} />
+          {isConfigured(site.instagram) && (
+            <a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+              <Instagram size={17} />
             </a>
           )}
           <a href={`mailto:${site.email}`} aria-label="Email">
@@ -147,6 +147,12 @@ export function TimeMachine() {
       year: '2026',
       image: '/images/time-machine/portfolio-2026.webp',
       href: '/',
+    },
+    {
+      name: 'Ressume',
+      year: '2026',
+      image: '/images/time-machine/resume.webp',
+      href: '/Habeebu-Rahman-CV.pdf',
     },
   ];
 

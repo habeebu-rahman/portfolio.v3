@@ -1,11 +1,47 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, Layers3 } from 'lucide-react';
-import { projects } from '@/lib/site';
+import { projects, site } from '@/lib/site';
 import Reveal from '@/components/Reveal';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, pageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Projects — Django & React Web Apps',
+  description: `Selected projects by Habeebu Rahman K C: ${projects
+    .map((project) => project.name)
+    .join(', ')}. Built with Django, React and PostgreSQL.`,
+  path: '/projects',
+  keywords: ['Django projects', 'React projects', 'full-stack projects', 'developer portfolio projects'],
+});
 
 export default function ProjectsPage() {
   return (
     <div className="section page-shell mx-auto">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Projects by Habeebu Rahman K C',
+          url: `${site.url}/projects`,
+          inLanguage: 'en-IN',
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: projects.map((project, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: project.name,
+              url: `${site.url}/projects/${project.slug}`,
+            })),
+          },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+        ])}
+      />
       <Reveal>
         <Link href="/#projects" className="back-link mb-10 inline-flex items-center gap-2">
           <ArrowLeft size={15} className="shrink-0" />

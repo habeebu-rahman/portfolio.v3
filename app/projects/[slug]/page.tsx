@@ -6,6 +6,8 @@ import { ArrowLeft, ArrowUpRight, Check, Code2, FolderGit2, Images, Layers3 } fr
 
 import Reveal from '@/components/Reveal';
 import { projects, site } from '@/lib/site';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, defaultOgImage, pageMetadata, personId } from '@/lib/seo';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -21,16 +23,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!project) return { title: 'Project not found' };
 
-  return {
-    title: `${project.name} — Project`,
+  const cover = project.screenshots?.[0];
+
+  return pageMetadata({
+    title: `${project.name} — ${project.type}`,
     description: project.summary,
-    alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: {
-      title: `${project.name} | ${site.name}`,
-      description: project.summary,
-      url: `${site.url}/projects/${project.slug}`,
-    },
-  };
+    path: `/projects/${project.slug}`,
+    keywords: [project.name, `${project.name} project`, ...project.stack],
+    image: cover ? { url: cover.src, alt: `${project.name}: ${cover.title}` } : defaultOgImage,
+  });
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -52,6 +53,27 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <div className="min-h-screen px-4 pb-24 pt-10 sm:px-8">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CreativeWork',
+          name: project.name,
+          description: project.summary,
+          url: `${site.url}/projects/${project.slug}`,
+          image: `${site.url}${screenshots[0]?.src ?? defaultOgImage.url}`,
+          dateCreated: project.year,
+          keywords: project.stack.join(', '),
+          inLanguage: 'en-IN',
+          creator: { '@id': personId },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+          { name: project.name, path: `/projects/${project.slug}` },
+        ])}
+      />
       <div className="mx-auto max-w-6xl">
         {/* Back navigation */}
         <Link

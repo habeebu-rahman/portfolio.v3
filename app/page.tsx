@@ -1,5 +1,7 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { pageMetadata } from '@/lib/seo';
 import {
   ArrowDown,
   ArrowUpRight,
@@ -8,7 +10,7 @@ import {
   Download,
   Github,
   GraduationCap,
-  Linkedin,
+  Instagram,
   Mail,
   MapPin,
   Server,
@@ -140,6 +142,13 @@ const technologyIcons: Record<string, React.ElementType> = {
   'git / github': SiGithub,
 };
 
+export const metadata: Metadata = pageMetadata({
+  title: site.title,
+  absoluteTitle: true,
+  description: site.description,
+  path: '/',
+});
+
 export default function Home() {
   return (
     <>
@@ -149,6 +158,7 @@ export default function Home() {
             <h1 className="mb-0">
               <span className="block text-[var(--color-ink)]">Habeebu</span>
               <span className="block text-[#A9C5D8]">Rahman K C</span>
+              <span className="sr-only"> — Python Full-Stack Developer in Calicut, Kerala</span>
             </h1>
 
             <p className="eyebrow mt-0 ml-0 self-start">
@@ -189,9 +199,9 @@ export default function Home() {
                 <Github size={17} /> GitHub <ArrowUpRight size={13} />
               </a>
             )}
-            {isConfigured(site.linkedin) && (
-              <a href={site.linkedin} target="_blank" rel="noreferrer">
-                <Linkedin size={17} /> LinkedIn <ArrowUpRight size={13} />
+            {isConfigured(site.instagram) && (
+              <a href={site.instagram} target="_blank" rel="noreferrer">
+                <Instagram size={17} /> Instagram <ArrowUpRight size={13} />
               </a>
             )}
             <a href={`mailto:${site.email}`}>

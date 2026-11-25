@@ -3,14 +3,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, Rss, NotebookPen, BookOpen } from 'lucide-react';
 import Reveal from '@/components/Reveal';
-import { posts } from '@/lib/site';
+import { posts, site } from '@/lib/site';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, pageMetadata, personId } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Journal',
+export const metadata: Metadata = pageMetadata({
+  title: 'Journal — Python, Django & React Notes',
   description:
     'Technical notes and lessons from Habeebu Rahman K C on Python, Django, React, databases and deployment.',
-  alternates: { canonical: '/journal' },
-};
+  path: '/journal',
+  keywords: ['Python notes', 'Django tutorials', 'React learning notes', 'developer journal'],
+});
 
 const topics = [
   {
@@ -40,6 +43,28 @@ const topics = [
 export default function JournalPage() {
   return (
     <div className="min-h-screen overflow-hidden">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Developer Journal — Habeebu Rahman K C',
+          url: `${site.url}/journal`,
+          inLanguage: 'en-IN',
+          author: { '@id': personId },
+          blogPost: posts.map((post) => ({
+            '@type': 'BlogPosting',
+            headline: post.title,
+            url: `${site.url}/journal/${post.slug}`,
+            datePublished: post.date,
+          })),
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Journal', path: '/journal' },
+        ])}
+      />
       {/* JOURNAL INTRO */}
       <section className="page-shell mx-auto max-w-6xl px-5 pb-14 pt-16 sm:px-8">
         <Reveal>

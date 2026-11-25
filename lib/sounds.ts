@@ -26,3 +26,31 @@ export function playUiSound(kind: 'click' | 'success' | 'pop' = 'click') {
     /* Audio is an optional enhancement; never interrupt navigation. */
   }
 }
+
+/* ------------------------------------------------------------------
+ * Shared sound on/off state.
+ * Every <SoundToggle /> (header, footer, anywhere else) reads from and
+ * writes to this one store, so they can never disagree.
+ * ------------------------------------------------------------------ */
+let soundEnabled = false;
+const soundListeners = new Set<() => void>();
+
+export function getSoundEnabled() {
+  return soundEnabled;
+}
+
+export function subscribeSound(listener: () => void) {
+  soundListeners.add(listener);
+  return () => {
+    soundListeners.delete(listener);
+  };
+}
+
+export function setSoundEnabled(next: boolean) {
+  soundEnabled = next;
+  // SoundEffects and the Time Machine button read this attribute.
+  if (typeof document !== 'undefined') {
+    document.documentElement.dataset.sound = next ? 'on' : 'off';
+  }
+  soundListeners.forEach((listener) => listener());
+}
